@@ -57,9 +57,10 @@ class MultiFind:
         node = self.root
         search_len = len(search)
         while index < search_len:
-            if search[index] not in node.next_char:
+            next_char = search[index]
+            if next_char not in node.next_char:
                 break
-            node = node.next_char[search[index]]
+            node = node.next_char[next_char]
             index += 1
             for matched_string in node.terminators:
                 found.append(Match(match=matched_string, index=start_index))
