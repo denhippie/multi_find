@@ -1,3 +1,5 @@
+import dataclasses
+
 import pytest
 
 from multi_find.multi_find import MultiFind, SearchString, Match
@@ -84,4 +86,29 @@ def test_subset_match(mf: MultiFind) -> None:
     assert mf.find_matches('now you have "bird is the word" in your head') == [
         Match(SearchString('bird is the word'), 14),
         Match(SearchString('the'), 22),
+    ]
+
+
+def test_custom_search_string_class(mf: MultiFind) -> None:
+    @dataclasses.dataclass
+    class Custom(SearchString):
+        custom: int
+
+    mf.add_search_strings([SearchString('word'), SearchString('a full sentence'), Custom('x', 6)])
+    assert mf.find_matches('the character x can be in a word') == [
+        Match(Custom('x', 6), 14),
+        Match(SearchString('word'), 28),
+    ]
+
+
+def test_custom_search_string_class_dupes(mf: MultiFind) -> None:
+    @dataclasses.dataclass
+    class Custom(SearchString):
+        custom: int
+
+    mf.add_search_strings([SearchString('word'), SearchString('a full sentence'), SearchString('x'), Custom('x', 6)])
+    assert mf.find_matches('the character x can be in a word') == [
+        Match(SearchString('x'), 14),
+        Match(Custom('x', 6), 14),
+        Match(SearchString('word'), 28),
     ]
