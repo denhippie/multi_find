@@ -52,14 +52,10 @@ class MultiFind:
         return found
 
     def _find_at_start_of_string(self, search: str, start_index: int, found: list[Match]) -> None:
-        index = start_index
         node = self.root
-        search_len = len(search)
-        while index < search_len:
-            next_char = search[index]
+        for next_char in search[start_index:]:
             if next_char not in node.next_char:
                 break
             node = node.next_char[next_char]
-            index += 1
             for matched_string in node.terminators:
                 found.append(Match(match=matched_string, index=start_index))
