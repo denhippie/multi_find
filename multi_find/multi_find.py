@@ -46,13 +46,12 @@ class MultiFind:
         next_node.terminators.append(search_string)
 
     def find_matches(self, search: str) -> list[Match]:
-        found = []
+        found: list[Match] = []
         for index in range(len(search)):
-            found += self._find_at_start_of_string(search, index)
+            self._find_at_start_of_string(search, index, found)
         return found
 
-    def _find_at_start_of_string(self, search: str, start_index: int) -> list[Match]:
-        found = []
+    def _find_at_start_of_string(self, search: str, start_index: int, found: list[Match]) -> None:
         index = start_index
         node = self.root
         search_len = len(search)
@@ -64,4 +63,3 @@ class MultiFind:
             index += 1
             for matched_string in node.terminators:
                 found.append(Match(match=matched_string, index=start_index))
-        return found
