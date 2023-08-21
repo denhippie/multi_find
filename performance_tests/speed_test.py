@@ -2,17 +2,17 @@ import random
 import string
 import time
 
-from .search_implementations import Searcher, BruteForce, Regex, Multi
+from .search_implementations import Searcher, BruteForce, Multi  # , Regex
 
 
 def speed_test() -> None:
     search = mock_search_strings()
     bf = BruteForce(list(search))
-    rex = Regex(list(search))
+    # rex = Regex(list(search))
     mul = Multi(list(search))
     searchers: list[Searcher] = [
         bf,
-        rex,
+        # rex,
         mul
     ]
     timings: dict[str, float] = {}
