@@ -2,7 +2,7 @@ import abc
 import re
 import time
 
-from multi_find.multi_find import MultiFind
+from multi_find.multi_find import MultiFind, SearchString
 
 
 class Searcher(abc.ABC):
@@ -49,11 +49,12 @@ class Multi(Searcher):
         start = time.time()
         self.multi = MultiFind()
         for word in search_words:
-            self.multi.add_word(word)
+            self.multi.add_search_string(SearchString(word))
         print(f'MultiFind index built in {time.time() - start}s')
 
     def name(self) -> str:
         return 'MultiFind'
 
     def search(self, source: str) -> list[str]:
-        return list(self.multi.find_words(source))
+        matches = self.multi.find_matches(source)
+        return [m.match.search for m in matches]
